@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="error-test-suite.xml" />
+	<munit:test name="error-test-suite-prc-products-api-mainTest" doc:id="363a9074-3437-4b35-a20c-235953b8b6f0" description="Test" expectedErrorType="APIKIT:BAD_REQUEST">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="6ae85b1b-24ba-4c0f-9f1c-1c96882b69be" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="prc-products-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to prc-products-api-main" doc:id="8ce1cd00-09fc-4fdb-95cc-9d565065c7da" name="prc-products-api-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="3085422c-5858-4445-8550-819d5559dc5a" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	
+	<munit:test name="error-test-suite-prc-products-api-mainTest-1" doc:id="ff28d77c-2d68-4df2-a168-8d24cc68c870" description="Test" expectedErrorType="APIKIT:NOT_FOUND">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="8a762008-c725-46fc-a179-d908181ef418" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="prc-products-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to prc-products-api-main" doc:id="27d574bf-07f9-4a15-b9e8-8f1064889905" name="prc-products-api-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="7804df7b-a999-4663-8cce-102a8132743b" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="error-test-suite-prc-products-api-consoleTest" doc:id="5d598522-8236-46a0-9add-09f1aa37a929" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to prc-products-api-console" doc:id="7e4534cc-9965-477a-ad94-374812985040" name="prc-products-api-console"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="error-test-suite-get:\pros:prc-products-api-configTest" doc:id="753ef918-3a37-4c1a-83f9-771e27ff00b2" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\pros:prc-products-api-config" doc:id="a66405b4-ff67-4c8f-b1bd-5446c2803a55" name="get:\pros:prc-products-api-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="error-test-suite-post:\pros:application\xml:prc-products-api-configTest" doc:id="17cca9a5-4e72-4d3b-9e75-e59e816dee39" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\pros:application\xml:prc-products-api-config" doc:id="9c04754a-08ab-47d2-9653-f798134cf1cf" name="post:\pros:application\xml:prc-products-api-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="error-test-suite-products-prc-api-implSub_Flow-GETTest" doc:id="c781cb2f-8480-4c7b-8f4c-810e6ac61884" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to products-prc-api-implSub_Flow-GET" doc:id="baacba17-43bb-46be-8834-637ee65f94f4" name="products-prc-api-implSub_Flow-GET"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

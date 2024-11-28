@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <http:listener-config name="prc-products-api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="prc-products-api-config" api="prc-products-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="prc-products-api-main" doc:id="f5b32cbb-4545-4709-a701-1baefb37eef6">
+        <http:listener config-ref="prc-products-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="prc-products-api-config" />
+        <error-handler ref="Global-ConfigError_Handler">
+            
+        </error-handler>
+    </flow>
+    <flow name="prc-products-api-console">
+        <http:listener config-ref="prc-products-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="prc-products-api-config" />
+        <error-handler ref="Global-ConfigError_Handler">
+        </error-handler>
+    </flow>
+    <flow name="get:\pros:prc-products-api-config">
+		<logger level="INFO" doc:name="Start Logger" doc:id="487aa8a9-69cc-417e-bfa0-ce5d2c3b689f" message="Start Logger"/>
+		<flow-ref doc:name="Flow Reference" doc:id="056768ab-50bb-4b4b-9f8d-7f5a2012077c" name="products-prc-api-implSub_Flow-GET"/>
+		<logger level="INFO" doc:name="End Logger" doc:id="ecfab322-60bf-4fe7-bfb8-0a8260701cd2" message="End Logger"/>
+    </flow>
+    <flow name="post:\pros:application\xml:prc-products-api-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  name: "phone",
+  price: 234
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

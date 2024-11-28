@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="prc-products-api-test-suite.xml" />
+	<munit:test name="prc-products-api-test-suite-prc-products-api-mainTest" doc:id="aea47f06-349d-4a53-904c-cce204905252" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="f0cb1342-9646-459d-b6f6-2f76402f87ac" processor="apikit:router"/>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to prc-products-api-main" doc:id="a165e41a-3997-4cdd-b9ed-a47313b7879a" name="prc-products-api-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="bb916b8f-b553-4e05-b635-2d4a0fab46e9" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="error-test-suiteTest" doc:id="a9092e5c-5a36-4a9f-9ac0-8b7bc46af1ea" expectedErrorType="APIKIT:BAD_REQUEST">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="7d28153e-5169-476b-be93-67a780916766" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="prc-products-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="a84181ac-6354-453f-95e3-41419e72aef3" name="prc-products-api-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="9dc79b82-470c-4d00-b6a9-7424e7154cb5" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="prc-products-api-test-suite-prc-products-api-consoleTest" doc:id="f5fcf27e-9917-4410-9665-d416cff6c8a1" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="0f59f825-1a44-4e3f-a825-cbc6558f2951" processor="apikit:console">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="prc-products-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to prc-products-api-console" doc:id="f7c64eb2-4d8a-4fa9-a9e1-2f0ed0ff823b" name="prc-products-api-console"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c0b2f5be-1c58-4e54-acea-79365508cb23" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="prc-products-api-test-suite-get:\pros:prc-products-api-configTest" doc:id="9f9c713f-09e6-4538-94cf-48aeea95044d" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="31736a0b-9530-410d-b4cb-4747fb646271" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="118ce2a2-8fe6-4fe6-a7dd-d8d7a5989494" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\pros:prc-products-api-config" doc:id="e9a14356-933a-44e1-8dc8-4049efb86c16" name="get:\pros:prc-products-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="b1dedf47-985c-4109-8f1f-378112dca1a3" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

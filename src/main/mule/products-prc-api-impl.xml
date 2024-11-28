@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="b0d49a18-95c3-4bdb-b725-ed7676dafa25" basePath="/api">
+		<http:request-connection host="0.0.0.0" port="8082" />
+	</http:request-config>
+	<sub-flow name="products-prc-api-implSub_Flow-GET" doc:id="156f2e01-68b7-4fca-aa47-dcf2326efee4" >
+		<logger level="INFO" doc:name="Start Logger" doc:id="2a25e0f5-8f14-4e1d-9350-3b8db240bba0" message="Start Logger"/>
+		<http:request method="GET" doc:name="Request" doc:id="118ce2a2-8fe6-4fe6-a7dd-d8d7a5989494" config-ref="HTTP_Request_configuration" path="/products" responseTimeout="30000000"/>
+		<ee:transform doc:name="Converting the payload into XML." doc:id="5a136cc9-02cd-4507-b4fc-474bdb8dad6b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+---
+{
+  "Item" : payload
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End Logger" doc:id="2b0ee2d1-22cf-4cfb-95c3-03f6731bdb4b" message="End Logger"/>
+	</sub-flow>
+</mule>

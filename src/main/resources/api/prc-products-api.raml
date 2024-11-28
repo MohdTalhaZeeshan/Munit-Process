@@ -1,0 +1,53 @@
+#%RAML 1.0
+title: prc-products-api
+
+types:
+  product:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: false
+      name: 
+        type: string
+        required: true
+      price: 
+        type: number
+        required: true
+
+/pros:
+  description: Transformtion Data
+  get:
+   description: Gets Data from SYS-API and applies Tranformation.
+   responses:
+    200:
+      body:
+        application/json:
+          example: |
+           [{ 
+            "id" : 1,"name": "phone","price":234}]
+            
+            
+
+  post:
+    description: Transforming the Data from XML to Json
+    body:
+      application/xml:
+        example: |
+         <item>
+          <name>Phone</name>
+          <price>345.9</price>
+         </item>
+
+    responses:
+      201:
+        body:
+          application/json:
+            example: |
+               {
+                 "name":"phone",
+                 "price":234
+               }
+              
+        
+
